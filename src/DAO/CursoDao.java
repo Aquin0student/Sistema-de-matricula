@@ -16,6 +16,7 @@ public class CursoDao extends AbstractDao{
 
     public void adicionarCurso(Curso curso){
         cursos.add(curso);
+        salvarDados();
 
     }
 

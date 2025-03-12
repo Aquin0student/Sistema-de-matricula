@@ -15,10 +15,12 @@ public class ProfessorDao extends AbstractDao {
 
     public void adicionarProfessor(Professor professor){
         professores.add(professor);
+        salvarDados();
     }
 
     public void removerProfessor(Professor professor){
         professores.remove(professor);
+        salvarDados();
     }
 
     public void salvarDados() {
