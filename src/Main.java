@@ -10,23 +10,32 @@ public class Main {
         UniversidadeDAO universidadeDAO = new UniversidadeDAO();
         Scanner scan = new Scanner(System.in);
         AlunoDAO alunoDAO = new AlunoDAO();
-
+        Universidade universidade = new Universidade();
         if (verificarUniversidade()) {
-            System.out.println("\nInsira o nome da universidade ");
-            String nome = scan.nextLine();
-            Universidade universidade = universidadeDAO.buscarUniversidade(nome);
-            if (universidade != null) {
-                System.out.println("\nInsira a senha da universidade ");
-                int senha = scan.nextInt();
-                if (universidade.getSenha() == senha) {
-                    menu(universidade);
+            boolean acesso = false;
+            while (!acesso) {
+                System.out.println("\nInsira o nome da universidade ");
+                String nome = scan.nextLine();
+                universidade = universidadeDAO.buscarUniversidade(nome);
+                if (universidade != null) {
+                    if (verificarSenha(universidade)) {
+                        acesso = true;
+                    }else{
+                        System.out.println("Senha incorreta!");
+                    }
+
+                }else{
+                    System.out.println("\nUniversidade nao encontrada \nDeseja criar uma? (SIM/NAO)  ");
+                    String opcao = scan.nextLine();
+                    if (opcao.equalsIgnoreCase("Sim")) {
+                        criarUniversidade();
+                    }
                 }
-            }else{
-                System.out.println("\nUniversidade nao encontrada ");
             }
+            menu(universidade);
         } else {
             System.out.println("\nNão há universidades cadastradas, prosseguindo para criar uma");
-            Universidade universidade = criarUniversidade();
+            universidade = criarUniversidade();
             menu(universidade);
         }
     }
@@ -35,6 +44,14 @@ public class Main {
         UniversidadeDAO universidadeDAO = new UniversidadeDAO();
         return !universidadeDAO.carregarUniversidades().isEmpty();
     }
+
+    public static boolean verificarSenha(Universidade universidade) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("\nInsira a senha da universidade ");
+        int senha = scan.nextInt();
+        return universidade.getSenha() == senha;
+    }
+
 
     public static Universidade criarUniversidade() {
         UniversidadeDAO universidadeDAO = new UniversidadeDAO();
@@ -50,10 +67,12 @@ public class Main {
     }
 
     public static void menu(Universidade universidade) {
-        System.out.println("Bem-vindo ao sistema de matrículas!");
-        System.out.println("1. Cadastrar Aluno");
-        System.out.println("2. Visualizar Alunos");
-        System.out.println("3. Sair");
+        System.out.println("Bem-vindo ao sistema da universidade " + universidade.getNome() + "!");
+        System.out.println("1. Gerenciar alunos");
+        System.out.println("2. Gerenciar cursos");
+        System.out.println("3. Gerenciar professores");
+        System.out.println("4. Gerenciar disciplinas");
+        System.out.println("5. Sair");
 
         Scanner scan = new Scanner(System.in);
         int opcao = scan.nextInt();
@@ -72,6 +91,16 @@ public class Main {
             default:
                 System.out.println("Opção inválida. Tente novamente.");
                 menu(universidade);
+        }
+    }
+
+    public static void gerenciarAlunos() {
+        Scanner scan = new Scanner(System.in);
+        int opcao = -1;
+        while (opcao != 0) {
+            System.out.println("Gerencia de alunos: ");
+            System.out.println("Criar aluno: ");
+            System.out.println("Cancelar matricula de aluno: ");
         }
     }
 }
