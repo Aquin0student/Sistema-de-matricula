@@ -1,7 +1,6 @@
 package DAO;
 
 
-import Models.Aluno;
 import Models.Curso;
 
 import java.io.*;
@@ -30,7 +29,7 @@ public class CursoDao extends AbstractDao{
 
     public void carregarDados() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_PATH))) {
-            cursos = (ArrayList<Aluno>) in.readObject();
+            cursos = (ArrayList<Curso>) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("⚠️ Nenhum dado encontrado ou erro ao carregar os dados.");
         }
