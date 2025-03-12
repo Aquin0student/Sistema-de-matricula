@@ -1,40 +1,39 @@
+import DAO.AlunoDAO;
+import Models.Aluno;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        int opcao = -1;
-        Scanner scan = new Scanner(System.in);
-        int matricula, senha;
+        Scanner sc = new Scanner(System.in);
+        AlunoDAO alunoDAO = new AlunoDAO();
 
-        while (opcao != 0) {
-            System.out.println("\nMenu de Login");
-            System.out.println("\nSelecione seu usuario");
-            System.out.println("\n1 - Aluno");
-            System.out.println("\n2 - Secretaria");
-            System.out.println("\n3 - Professor");
-            System.out.println("\n0 - Sair");
-            opcao = scan.nextInt();
+        alunoDAO.carregarDados(); // Carrega os dados ao iniciar
 
-            switch (opcao) {
-                case 1:
-                    System.out.println("\nInsira a matricula do aluno: ");
-                    matricula = scan.nextInt();
-                    System.out.println("\nInsira a senha do aluno: ");
-                    senha = scan.nextInt();
+        System.out.print("Deseja cadastrar um novo aluno? (s/n): ");
+        if (sc.nextLine().equalsIgnoreCase("s")) {
+            System.out.print("Digite o nome do aluno: ");
+            String nome = sc.nextLine();
 
-                case 2:
-                    System.out.println("\nInsira a matricula do aluno: ");
-                    matricula = scan.nextInt();
-                    System.out.println("\nInsira a senha do aluno: ");
-                    senha = scan.nextInt();
-                case 3:
-                    System.out.println("\nInsira a matricula do aluno: ");
-                    matricula = scan.nextInt();
-                    System.out.println("\nInsira a senha do aluno: ");
-                    senha = scan.nextInt();
+            System.out.print("Digite a senha: ");
+            int senha = sc.nextInt();
 
-            }
+            Aluno novoAluno = new Aluno(nome);
+            novoAluno.setSenha(senha);
+            alunoDAO.adicionarAluno(novoAluno);
+            System.out.println("✅ Aluno cadastrado com sucesso!");
+        }
 
+        System.out.print("Digite seu nome para login: ");
+        String nomeLogin = sc.next();
+
+        System.out.print("Digite sua senha: ");
+        int senhaLogin = sc.nextInt();
+
+        if (alunoDAO.verificarLogin(nomeLogin, senhaLogin)) {
+            System.out.println("✅ Login bem-sucedido! Bem-vindo, " + nomeLogin);
+        } else {
+            System.out.println("❌ Falha no login! Verifique seu nome ou senha.");
         }
     }
 }
