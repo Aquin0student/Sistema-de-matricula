@@ -1,13 +1,12 @@
 import DAO.AlunoDAO;
-import DAO.UniversidadeDAO;
-import Models.Aluno;
+import DAO.UniversidadeDao;
 import Models.Universidade;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        UniversidadeDAO universidadeDAO = new UniversidadeDAO();
+        UniversidadeDao universidadeDAO = new UniversidadeDao();
         Scanner scan = new Scanner(System.in);
         AlunoDAO alunoDAO = new AlunoDAO();
         Universidade universidade = new Universidade();
@@ -41,7 +40,7 @@ public class Main {
     }
 
     public static boolean verificarUniversidade() {
-        UniversidadeDAO universidadeDAO = new UniversidadeDAO();
+        UniversidadeDao universidadeDAO = new UniversidadeDao();
         return !universidadeDAO.carregarUniversidades().isEmpty();
     }
 
@@ -54,7 +53,7 @@ public class Main {
 
 
     public static Universidade criarUniversidade() {
-        UniversidadeDAO universidadeDAO = new UniversidadeDAO();
+        UniversidadeDao universidadeDAO = new UniversidadeDao();
         System.out.println("\nDigite o nome da Universidade: ");
         Scanner scan = new Scanner(System.in);
         String nome = scan.nextLine();

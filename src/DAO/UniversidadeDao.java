@@ -1,11 +1,10 @@
 package DAO;
 
-import Models.Aluno;
 import Models.Universidade;
 import java.io.*;
 import java.util.ArrayList;
 
-public class UniversidadeDAO {
+public class UniversidadeDao {
     private static final String FILE_NAME = "universidade_data.dat";
     private ArrayList<Universidade> universidades = new ArrayList<>();
 
