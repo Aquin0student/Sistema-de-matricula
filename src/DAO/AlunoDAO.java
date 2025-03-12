@@ -8,9 +8,13 @@ import java.util.ArrayList;
 
 
 
-public class AlunoDAO {
+public class AlunoDAO extends AbstractDao<Aluno> {
     private ArrayList<Aluno> alunos = new ArrayList<>();
-    private final String FILE_PATH = "alunos.dat";
+    private static final String FILE_PATH = "alunos.dat";
+
+    public AlunoDAO() {
+        super(FILE_PATH);
+    }
 
     public void adicionarAluno(Aluno aluno) {
         alunos.add(aluno);
