@@ -8,6 +8,7 @@ public class Universidade {
     private ArrayList<Curso> cursos = new ArrayList<Curso>();
     private ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();
     private ArrayList<Professor> professores = new ArrayList<Professor>();
+    int senha;
 
     public Universidade() {}
 
@@ -54,5 +55,11 @@ public class Universidade {
         cursos.add(curso);
     }
 
+    public int getSenha() {
+        return senha;
+    }
 
+    public void setSenha(int senha) {
+        this.senha = senha;
+    }
 }
