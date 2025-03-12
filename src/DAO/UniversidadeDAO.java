@@ -22,6 +22,10 @@ public class UniversidadeDAO {
         }
     }
 
+    public void adicionarUniversidade(Universidade universidade) {
+        universidades.add(universidade);
+        salvarUniversidade(universidade);
+    }
     // Carrega todas as universidades do arquivo
     public ArrayList<Universidade> carregarUniversidades() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
