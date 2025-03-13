@@ -1,7 +1,6 @@
 package DAO;
 
 import Models.Professor;
-
 import java.io.*;
 import java.util.ArrayList;
 
@@ -19,7 +18,6 @@ public class ProfessorDao extends AbstractDao {
         salvarDados();
     }
 
-
     public static ProfessorDao getInstance() {
         if (instancia == null) {
             synchronized (ProfessorDao.class) {
@@ -30,7 +28,6 @@ public class ProfessorDao extends AbstractDao {
         }
         return instancia;
     }
-
 
     public void removerProfessor(Professor professor){
         professores.remove(professor);
@@ -53,13 +50,17 @@ public class ProfessorDao extends AbstractDao {
         }
     }
 
-    public Professor buscarProfessorPorNome(String Professor) {
+    public Professor buscarProfessorPorNome(String professorNome) {
         for (Professor professor : professores) {
-            if (professor.getNome().equalsIgnoreCase(Professor)) {
+            if (professor.getNome().equalsIgnoreCase(professorNome)) {
                 return professor;
             }
         }
         return null;
     }
 
+    public ArrayList<Professor> listarProfessores() {
+        carregarDados();
+        return professores;
+    }
 }

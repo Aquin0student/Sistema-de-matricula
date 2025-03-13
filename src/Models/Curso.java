@@ -1,8 +1,9 @@
 package Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Curso {
+public class Curso implements Serializable {
     String nome;
     int numCreditos;
     ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();

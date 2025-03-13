@@ -1,14 +1,20 @@
+import Controller.ProfessorController;
 import DAO.AlunoDao;
 import DAO.MatriculaDao;
 import DAO.UniversidadeDao;
+import DAO.ProfessorDao;
 import Enums.StatusMatricula;
 import Models.Aluno;
 import Models.Matricula;
 import Models.Universidade;
+import Models.Professor;
+import static Controller.ProfessorController.criarProfessor;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+
+import static Controller.ProfessorController.criarProfessor;
 
 public class Main {
     public static void main(String[] args) {
@@ -75,8 +81,7 @@ public class Main {
                     limparConsole();
                     break;
                 case 3:
-                    System.out.println("Saindo...");
-                    System.exit(0);
+                    gerenciarProfessores();
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
@@ -341,6 +346,55 @@ public class Main {
             aluno.getMatricula().setStatusMatricula(StatusMatricula.ATIVA);
             System.out.println("Matricula " + aluno.getMatricula().getNumero() + " ativada");
         }
+    }
+
+    // Menu Professor
+
+    public static void gerenciarProfessores() {
+        Scanner scan = new Scanner(System.in);
+
+        AlunoDao alunoDAO = new AlunoDao();
+        MatriculaDao matriculaDAO = new MatriculaDao();
+        Aluno aluno;
+        int opcao;
+
+        do{
+            System.out.println("Gerencia de professores: ");
+            System.out.println("1- Adiciona professor: ");
+            System.out.println("2- Listar professor: ");
+            System.out.println("2- Remover professor: ");
+            System.out.println("4- Voltar: ");
+
+            opcao = scan.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    Professor professor = criarProfessor();
+                    esperar();
+                    limparConsole();
+                    break;
+                case 2:
+                    ProfessorController professorController = new ProfessorController();
+                    professorController.listarProfessores();
+                    break;
+
+                case 3:
+                    System.out.println("Voltando...");
+                    esperar();
+                    limparConsole();
+                    break;
+
+                case 4:
+                    System.out.println("Voltando...");
+                    esperar();
+                    limparConsole();
+                    break;
+
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        }while (opcao != 4);
     }
 
 }

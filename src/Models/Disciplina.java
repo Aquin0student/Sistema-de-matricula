@@ -3,9 +3,10 @@ package Models;
 import Enums.StatusDisciplina;
 import Enums.TipoDisciplina;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Disciplina {
+public class Disciplina implements Serializable {
     private String nome;
     private ArrayList<Professor> professores= new ArrayList<Professor>();
     private ArrayList<Matricula> matriculas = new ArrayList<Matricula>();
