@@ -2,37 +2,34 @@ package Models;
 
 import Enums.StatusMatricula;
 import Enums.TipoDisciplina;
-import java.util.ArrayList;
-import java.util.Date;
 
-public class Matricula {
-    private String numero;  // novo atributo para armazenar o número da matrícula
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+public class Matricula implements Serializable {
+    private int numero;
     private Aluno aluno;
     private ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();
-    private Date dataMatricula;
+    private LocalDate dataMatricula;
     private StatusMatricula statusMatricula;
     private int obrigatoria = 0;
     private int optativa = 0;
 
-    // Construtor que recebe o número da matrícula
-    public Matricula(String numero) {
+
+    public Matricula(int numero) {
         this.numero = numero;
-        this.dataMatricula = new Date();
-        // Opcional: defina um status padrão, por exemplo:
-        // this.statusMatricula = StatusMatricula.ATIVA;
+        this.statusMatricula = StatusMatricula.ATIVA;
+        dataMatricula = LocalDate.now();
     }
 
-    // Construtor padrão (caso seja necessário)
-    public Matricula() {
-        this.dataMatricula = new Date();
-    }
 
-    // Getter e setter para o atributo numero
-    public String getNumero() {
+
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
@@ -44,11 +41,11 @@ public class Matricula {
         this.statusMatricula = statusMatricula;
     }
 
-    public Date getDataMatricula() {
+    public LocalDate getDataMatricula() {
         return dataMatricula;
     }
 
-    public void setDataMatricula(Date dataMatricula) {
+    public void setDataMatricula(LocalDate dataMatricula) {
         this.dataMatricula = dataMatricula;
     }
 
