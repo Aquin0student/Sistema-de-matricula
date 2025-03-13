@@ -24,6 +24,10 @@ public class Aluno implements Serializable {
         return matricula;
     }
 
+    public void setMatricula(Matricula matricula) {
+        this.matricula = matricula;
+    }
+
     public void setSenha(int senha) {
         this.senha = senha;
     }
