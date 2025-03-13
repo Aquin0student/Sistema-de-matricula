@@ -10,9 +10,9 @@ public class UniversidadeDao {
     private ArrayList<Universidade> universidades = new ArrayList<>();
     private static UniversidadeDao instancia;
 
-    public void adicionarUniversidade(Universidade universidade) {
+    public void adicionarUniversidadeSimples(Universidade universidade) {
         universidades.add(universidade);
-        salvarDados();
+        salvarDados(universidade);
     }
 
     public static UniversidadeDao getInstance() {
@@ -26,9 +26,8 @@ public class UniversidadeDao {
         return instancia;
     }
 
-
     // Salva a lista de universidades no arquivo
-    public void salvarUniversidade(Universidade universidade) {
+    public void salvarDados(Universidade universidade) {
         ArrayList<Universidade> universidades = carregarUniversidades();
         universidades.add(universidade);
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
@@ -41,8 +40,9 @@ public class UniversidadeDao {
 
     public void adicionarUniversidade(Universidade universidade) {
         universidades.add(universidade);
-        salvarUniversidade(universidade);
+        salvarDados(universidade);
     }
+
     // Carrega todas as universidades do arquivo
     public ArrayList<Universidade> carregarUniversidades() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME))) {

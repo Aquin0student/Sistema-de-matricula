@@ -51,7 +51,7 @@ public class MatriculaDao extends AbstractDao {
     public Matricula buscarMatriculaPorAluno(String aluno) {
         for (Matricula matricula : matriculas) {
             // Supondo que a classe Matricula possua um método getAluno() que retorna o nome do aluno
-            if (matricula.getAluno().equalsIgnoreCase(aluno)) {
+            if (matricula.getAluno().getNome().equalsIgnoreCase(aluno)) {
                 return matricula;
             }
         }

@@ -61,7 +61,7 @@ public class Main {
         int senha = scan.nextInt();
         Universidade universidade = new Universidade(nome);
         universidade.setSenha(senha);
-        universidadeDAO.salvarUniversidade(universidade);
+        universidadeDAO.salvarDados(universidade);
         return universidade;
     }
 
