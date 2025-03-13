@@ -14,6 +14,7 @@ public class DisciplinaDao extends AbstractDao {
     }
 
     public void adicionarDisciplina(Disciplina disciplina) {
+        carregarDados();
         disciplinas.add(disciplina);
         salvarDados();
     }

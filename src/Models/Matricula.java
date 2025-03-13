@@ -54,17 +54,29 @@ public class Matricula implements Serializable {
     }
 
     public void adicionarDisciplina(Disciplina disciplina) {
-        if (disciplina.getTipoDisciplina() == TipoDisciplina.OBRIGATORIA) {
-            if (obrigatoria <= 4) {
-                obrigatoria++;
-                disciplinas.add(disciplina);
+        if(!disciplina.estaCheia()){
+            if (disciplina.getTipoDisciplina() == TipoDisciplina.OBRIGATORIA) {
+                if (obrigatoria <= 4) {
+                    obrigatoria++;
+                    disciplinas.add(disciplina);
+                    System.out.println("Matricula adicionada com sucesso!");
+                }else{
+                    System.out.println("Limite de disciplinas obrigatorias atingigo. Não foi possivel adicionar a disciplina " + disciplina.getNome());
+                }
+            } else {
+                if (optativa <= 2) {
+                    optativa++;
+                    disciplinas.add(disciplina);
+                    System.out.println("Matricula adicionada com sucesso!");
+                }else {
+                    System.out.println("Limite de disciplinas optativas atingigo. Não foi possivel adicionar a disciplina " + disciplina.getNome());
+                }
             }
-        } else {
-            if (optativa <= 2) {
-                optativa++;
-                disciplinas.add(disciplina);
-            }
+        }else{
+            System.out.println("Disciplina cheia. Não foi possivel adicionar a disciplina " + disciplina.getNome());
         }
+
+
     }
 
     public void removerDisciplina(Disciplina disciplina) {

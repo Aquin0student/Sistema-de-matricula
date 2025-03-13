@@ -14,6 +14,7 @@ public class MatriculaDao extends AbstractDao {
     }
 
     public void adicionarMatricula(Matricula matricula) {
+        carregarDados();
         matriculas.add(matricula);
         salvarDados();
     }

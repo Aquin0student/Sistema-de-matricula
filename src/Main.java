@@ -1,5 +1,6 @@
 import Controller.ProfessorController;
 import DAO.*;
+import Enums.StatusDisciplina;
 import Enums.StatusMatricula;
 import Enums.TipoDisciplina;
 import Models.*;
@@ -93,6 +94,8 @@ public class Main {
     public static void menuAlunos(Aluno aluno) {
         Scanner scan = new Scanner(System.in);
         int opcao;
+        SistemaDeCobrancas sistemaDeCobrancas = new SistemaDeCobrancas();
+        sistemaDeCobrancas.cobrarAluno(aluno);
 
         do{
             System.out.println("\nBem vindo ao menu universitario: ");
@@ -148,7 +151,7 @@ public class Main {
                     break;
 
                 case 2:
-                    break;
+                    break;1
 
                 case 3:
                     loginSecretaria();
@@ -540,6 +543,14 @@ public class Main {
                 System.out.println(matricula.getNumero());
             }
             System.out.println("Total de matriculas: " + totalMatriculas);
+
+            if(totalMatriculas < 3){
+                System.out.println("Não há alunos suficientes para a disciplina " + disciplina.getNome());
+                System.out.println("A disciplina " + disciplina.getNome() + "estara desativa ate a quantidade minima de alunos matriculados for atingida ");
+                disciplina.setStatusDisciplina(StatusDisciplina.CANCELADA);
+            }else{
+                disciplina.setStatusDisciplina(StatusDisciplina.ATIVA);
+            }
         }
     }
 
@@ -598,7 +609,7 @@ public class Main {
                 if(opcao.equalsIgnoreCase(disciplina.getNome())){
                     matricula.adicionarDisciplina(disciplina);
                     disciplina.adicionarMatricula(matricula);
-                    System.out.println("Matricula adicionada com sucesso!");
+
                 }
             }
 
