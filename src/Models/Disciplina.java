@@ -14,6 +14,12 @@ public class Disciplina implements Serializable {
     private TipoDisciplina tipoDisciplina;
     private int numCreditos;
 
+    public Disciplina(String nome) {
+        this.nome = nome;
+        this.statusDisciplina = StatusDisciplina.ATIVA;
+
+    }
+
     public String getNome() {
         return nome;
     }
@@ -68,5 +74,9 @@ public class Disciplina implements Serializable {
 
     public void setTipoDisciplina(TipoDisciplina tipoDisciplina) {
         this.tipoDisciplina = tipoDisciplina;
+    }
+
+    public ArrayList<Matricula> getMatriculas() {
+        return matriculas;
     }
 }

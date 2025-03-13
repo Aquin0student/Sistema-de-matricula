@@ -1,4 +1,4 @@
-package Controllers;
+package Controller;
 
 import DAO.AlunoDao;
 import Models.Aluno;
@@ -27,8 +27,8 @@ public class AlunoController {
             System.out.print("Digite o tipo da disciplina (1 - Obrigatória, 2 - Optativa): ");
             int tipo = scan.nextInt();
             scan.nextLine();
-            Disciplina disciplina = new Disciplina();
-            disciplina.setNome(nomeDisciplina);
+            Disciplina disciplina = new Disciplina(nomeDisciplina);
+
             disciplina.setTipoDisciplina(tipo == 1 ? TipoDisciplina.OBRIGATORIA : TipoDisciplina.OPTATIVA);
             matricula.adicionarDisciplina(disciplina);
             System.out.print("Deseja adicionar outra disciplina? (SIM/NAO): ");

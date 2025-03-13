@@ -1,20 +1,14 @@
 import Controller.ProfessorController;
-import DAO.AlunoDao;
-import DAO.MatriculaDao;
-import DAO.UniversidadeDao;
-import DAO.ProfessorDao;
+import DAO.*;
 import Enums.StatusMatricula;
-import Models.Aluno;
-import Models.Matricula;
-import Models.Universidade;
-import Models.Professor;
+import Enums.TipoDisciplina;
+import Models.*;
+
 import static Controller.ProfessorController.criarProfessor;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
-import static Controller.ProfessorController.criarProfessor;
 
 public class Main {
     public static void main(String[] args) {
@@ -83,6 +77,11 @@ public class Main {
                 case 3:
                     gerenciarProfessores();
                     break;
+
+                case 4:
+                    gerenciarDisciplinas();
+                    break;
+
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
                     break;
@@ -95,7 +94,6 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         int opcao;
 
-        System.out.println("chegou no menu de alunos");
     }
 
     public static void menuLogin(){
@@ -151,6 +149,13 @@ public class Main {
                 if (matricula.getAluno().getSenha() == senha) {
                     acesso = true;
                     menuAlunos();
+                }else{
+                    System.out.println("\n Senha incorreta: ");
+                    System.out.println("Deseja voltar ao menu principal? (S/N)");
+                    String opcao = scan.next();
+                    if(opcao.equals("S")){
+                        break;
+                    }
                 }
             }
 
@@ -225,7 +230,7 @@ public class Main {
                     limparConsole();
                     break;
                 case 2:
-                    aluno = buscarAluno();
+                    aluno = buscarAlunoPorMatricula();
                     if (aluno == null) {
                         break;
                     }
@@ -235,7 +240,7 @@ public class Main {
                     break;
 
                 case 3:
-                    aluno = buscarAluno();
+                    aluno = buscarAlunoPorMatricula();
                     if (aluno == null) {
                         break;
                     }
@@ -292,7 +297,7 @@ public class Main {
         return aluno;
     }
 
-    public static Aluno buscarAluno(){
+    public static Aluno buscarAlunoPorMatricula(){
         AlunoDao alunoDAO = new AlunoDao();
         Scanner scan = new Scanner(System.in);
         Aluno aluno = null;
@@ -397,4 +402,118 @@ public class Main {
         }while (opcao != 4);
     }
 
+    public static void gerenciarCursos() {
+        Scanner scan = new Scanner(System.in);
+        int opcao;
+        do{
+            System.out.println("Gerencia de cursos: ");
+            System.out.println("1- Adicionar curso: ");
+            System.out.println("2- Adicionar disciplina ao curso: ");
+            System.out.println("3- Listar cursos: ");
+            System.out.println("4- Voltar: ");
+            opcao = scan.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    criarCurso();
+                    break;
+
+                case 2:
+                    adicionarDisciplinaAoCurso();
+                    break;
+
+            }
+        }while (opcao != 4);
+
+    }
+
+    public static void gerenciarDisciplinas() {
+        Scanner scan = new Scanner(System.in);
+        int opcao;
+
+        do{
+            System.out.println("Gerencia de disciplinas: ");
+            System.out.println("1- Criar disciplina: ");
+            System.out.println("2- Verificar matriculas para a disciplina: ");
+            System.out.println("3- Listar disciplinas: ");
+            System.out.println("4- Voltar: ");
+            opcao = scan.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    criarDisciplina();
+                    break;
+
+                case 2:
+                    verificarMatriculasDisciplina();
+                    break;
+
+                case 3:
+                    listarDisciplinas();
+                    break;
+            }
+        }while (opcao != 4);
+    }
+
+    public static void criarCurso(){
+        Scanner scan = new Scanner(System.in);
+        CursoDao cursoDAO = new CursoDao();
+        System.out.println("Digite o nome do curso: ");
+        Curso curso = new Curso(scan.next());
+        System.out.println("Digite o total de creditos do curso " + curso.getNome());
+        curso.setNumCreditos(scan.nextInt());
+
+        cursoDAO.adicionarCurso(curso);
+        System.out.println("Curso " + curso.getNome() + " adicionado com sucesso!");
+    }
+
+    public static void adicionarDisciplinaAoCurso(){
+        Scanner scan = new Scanner(System.in);
+    }
+
+    public static void criarDisciplina(){
+        Scanner scan = new Scanner(System.in);
+        DisciplinaDao disciplinaDAO = new DisciplinaDao();
+        System.out.println("Digite o nome do disciplina: ");
+        Disciplina disciplina = new Disciplina(scan.next());
+        System.out.println("Digite o total de creditos da disciplina " + disciplina.getNome() + " :");
+        disciplina.setNumCreditos(scan.nextInt());
+        System.out.println("Digite o tipo de disciplina: (OBRIGATORIA): 1 (OPTATIVA): 2 )");
+        int tipo = scan.nextInt();
+        if (tipo == 1) {
+            disciplina.setTipoDisciplina(TipoDisciplina.OBRIGATORIA);
+        }else{
+            disciplina.setTipoDisciplina(TipoDisciplina.OPTATIVA);
+        }
+
+        DisciplinaDao disciplinaDao = new DisciplinaDao();
+        disciplinaDao.adicionarDisciplina(disciplina);
+        System.out.println("Disciplina adicionada com sucesso!");
+    }
+
+    public static void verificarMatriculasDisciplina(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Digite o nome do disciplina: ");
+        DisciplinaDao disciplinaDAO = new DisciplinaDao();
+        Disciplina disciplina = disciplinaDAO.buscarDisciplinaPorNome(scan.next());
+        if (disciplina == null) {
+            System.out.println("Disciplina nao encontrada!");
+        }else{
+            ArrayList<Matricula> matriculas = disciplina.getMatriculas();
+            int totalMatriculas = matriculas.size();
+            for (Matricula matricula : matriculas) {
+                System.out.println(matricula.getNumero());
+            }
+            System.out.println("Total de matriculas: " + totalMatriculas);
+        }
+    }
+
+    public static void listarDisciplinas(){
+        DisciplinaDao disciplinaDAO = new DisciplinaDao();
+        ArrayList<Disciplina> disciplinas = new ArrayList<>();
+        disciplinas = disciplinaDAO.listarDisciplinas();
+        for (Disciplina disciplina : disciplinas) {
+            System.out.println(disciplina.getNome());
+        }
+    }
 }

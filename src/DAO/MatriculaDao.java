@@ -64,6 +64,7 @@ public class MatriculaDao extends AbstractDao {
     }
 
     public Matricula buscarMatriculaPorNumero(int numero) {
+        carregarDados();
         for (Matricula matricula : matriculas) {
             if (matricula.getNumero() == numero) {
                 return matricula;

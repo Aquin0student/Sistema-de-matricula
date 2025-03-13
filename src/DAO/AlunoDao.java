@@ -15,9 +15,11 @@ public class AlunoDao extends AbstractDao<Aluno> {
 
     public AlunoDao() {
         super(FILE_PATH);
+        carregarDados();
     }
 
     public void adicionarAluno(Aluno aluno) {
+        carregarDados();
         alunos.add(aluno);
         salvarDados();
     }

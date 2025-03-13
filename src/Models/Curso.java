@@ -8,6 +8,9 @@ public class Curso implements Serializable {
     int numCreditos;
     ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();
 
+    public Curso(String nome) {
+        this.nome = nome;
+    }
     public String getNome() {
         return nome;
     }

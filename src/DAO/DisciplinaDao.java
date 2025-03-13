@@ -46,6 +46,7 @@ public class DisciplinaDao extends AbstractDao {
     }
 
     public Disciplina buscarDisciplinaPorNome(String nome) {
+        carregarDados();
         for (Disciplina disciplina : disciplinas) {
             if (disciplina.getNome().equalsIgnoreCase(nome)) {
                 return disciplina;
