@@ -16,33 +16,14 @@ public class Main {
         Scanner scan = new Scanner(System.in);
         AlunoDao alunoDAO = new AlunoDao();
         Universidade universidade = new Universidade();
-        if (verificarUniversidade()) {
-            boolean acesso = false;
-            while (!acesso) {
-                System.out.println("\nInsira o nome da universidade ");
-                String nome = scan.nextLine();
-                universidade = universidadeDAO.buscarUniversidade(nome);
-                if (universidade != null) {
-                    if (verificarSenha(universidade)) {
-                        acesso = true;
-                    }else{
-                        System.out.println("Senha incorreta!");
-                    }
-
-                }else{
-                    System.out.println("\nUniversidade nao encontrada \nDeseja criar uma? (SIM/NAO)  ");
-                    String opcao = scan.nextLine();
-                    if (opcao.equalsIgnoreCase("Sim")) {
-                        criarUniversidade();
-                    }
-                }
-            }
-            menu(universidade);
-        } else {
-            System.out.println("\nNão há universidades cadastradas, prosseguindo para criar uma");
-            universidade = criarUniversidade();
-            menu(universidade);
+        MatriculaDao matriculaDAO = new MatriculaDao();
+        ArrayList<Matricula> matriculas = new ArrayList<>();
+        matriculas = matriculaDAO.listarMatriculas();
+        for (Matricula matricula : matriculas) {
+            System.out.println(matricula.getNumero());
         }
+        menuLogin();
+
     }
 
     public static boolean verificarUniversidade() {
@@ -71,11 +52,11 @@ public class Main {
         return universidade;
     }
 
-    public static void menu(Universidade universidade) {
+    public static void menuAdmnistrativo(Universidade universidade) {
         Scanner scan = new Scanner(System.in);
         int opcao;
         do{
-            System.out.println("Bem-vindo ao sistema da universidade " + universidade.getNome() + "!");
+            System.out.println("Bem-vindo ao sistema administrativo da universidade " + universidade.getNome() + "!");
             System.out.println("1. Gerenciar alunos");
             System.out.println("2. Gerenciar cursos");
             System.out.println("3. Gerenciar professores");
@@ -87,6 +68,7 @@ public class Main {
             switch(opcao) {
                 case 1:
                     gerenciarAlunos();
+                    break;
                 case 2:
                     System.out.println("Visualização de cursos ainda não implementada.");
                     esperar();
@@ -98,10 +80,115 @@ public class Main {
                     break;
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
-                    menu(universidade);
+                    break;
             }
         }while(opcao != 5);
 
+    }
+
+    public static void menuAlunos() {
+        Scanner scan = new Scanner(System.in);
+        int opcao;
+
+        System.out.println("chegou no menu de alunos");
+    }
+
+    public static void menuLogin(){
+        Scanner scan = new Scanner(System.in);
+        int opcao;
+
+        do{
+            System.out.println("\nEscolha o tipo de usuario: ");
+            System.out.println("1. Aluno");
+            System.out.println("2. Professor");
+            System.out.println("3. Secretaria");
+            opcao = scan.nextInt();
+
+            switch(opcao) {
+                case 1:
+                    loginAlunos();
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    loginSecretaria();
+                    break;
+
+                default:
+                    System.out.println("Opcao invalida. Tente novamente.");
+                    break;
+            }
+
+        }while(opcao != 0);
+    }
+
+    public static void loginAlunos() {
+        Scanner scan = new Scanner(System.in);
+        MatriculaDao matriculaDAO = new MatriculaDao();
+        Matricula matricula;
+        boolean acesso = false;
+        do{
+            System.out.println("\nInsira o numero de matricula: ");
+            int numMatricula = scan.nextInt();
+            matricula = matriculaDAO.buscarMatriculaPorNumero(numMatricula);
+
+            if(matricula == null){
+                System.out.println("Deseja voltar ao menu principal? (S/N)");
+                String opcao = scan.next();
+                if(opcao.equals("S")){
+                    break;
+                }
+            }else{
+                System.out.println("\n Insira a senha: ");
+                int senha = scan.nextInt();
+                if (matricula.getAluno().getSenha() == senha) {
+                    acesso = true;
+                    menuAlunos();
+                }
+            }
+
+
+        }while(!acesso);
+
+
+    }
+
+    public static void loginSecretaria() {
+        Scanner scan = new Scanner(System.in);
+        UniversidadeDao universidadeDAO = new UniversidadeDao();
+        Universidade universidade = new Universidade();
+
+        if (verificarUniversidade()) {
+            boolean acesso = false;
+            while (!acesso) {
+                System.out.println("\nInsira o nome da universidade ");
+                String nome = scan.nextLine();
+                universidade = universidadeDAO.buscarUniversidade(nome);
+                if (universidade != null) {
+                    if (verificarSenha(universidade)) {
+                        acesso = true;
+                    }else{
+                        System.out.println("Senha incorreta!");
+                    }
+
+                }else{
+                    System.out.println("\nUniversidade nao encontrada \nDeseja criar uma? (SIM/NAO)  ");
+                    String opcao = scan.nextLine();
+                    if (opcao.equalsIgnoreCase("Sim")) {
+                        criarUniversidade();
+                    }
+                }
+            }
+
+
+            menuAdmnistrativo(universidade);
+        } else {
+            System.out.println("\nNão há universidades cadastradas, prosseguindo para criar uma");
+            universidade = criarUniversidade();
+            menuAdmnistrativo(universidade);
+        }
     }
 
     public static void gerenciarAlunos() {
@@ -117,6 +204,7 @@ public class Main {
             System.out.println("1- Criar aluno: ");
             System.out.println("2- Cancelar matricula de aluno: ");
             System.out.println("3- Ativar matricula de aluno: ");
+            System.out.println("4- Voltar: ");
 
             opcao = scan.nextInt();
 
@@ -128,6 +216,8 @@ public class Main {
                     matricula.setAluno(aluno);
                     alunoDAO.adicionarAluno(aluno);
                     matriculaDAO.adicionarMatricula(matricula);
+                    esperar();
+                    limparConsole();
                     break;
                 case 2:
                     aluno = buscarAluno();
@@ -135,6 +225,8 @@ public class Main {
                         break;
                     }
                     cancelarMatricula(aluno);
+                    esperar();
+                    limparConsole();
                     break;
 
                 case 3:
@@ -142,14 +234,23 @@ public class Main {
                     if (aluno == null) {
                         break;
                     }
+                    ativarMatricula(aluno);
+                    esperar();
+                    limparConsole();
+                    break;
 
+                case 4:
+                    System.out.println("Voltando...");
+                    esperar();
+                    limparConsole();
+                    break;
 
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
             }
-        }while (opcao != 0);
+        }while (opcao != 4);
     }
-
-
-
 
     public static Matricula criarMatricula() {
         Scanner scan = new Scanner(System.in);
@@ -196,7 +297,7 @@ public class Main {
             String nomeAluno = scan.next();
             aluno = alunoDAO.buscarAlunoPorNome(nomeAluno);
             if(aluno == null){
-                System.out.println("Deseja voltar ao menu? (S/N)");
+                System.out.println("Deseja voltar ao menuAdmnistrativo? (S/N)");
                 String opcao = scan.next();
                 if (opcao.equalsIgnoreCase("S")) {
                     break;
@@ -232,6 +333,14 @@ public class Main {
         }
     }
 
-
+    public static void ativarMatricula(Aluno aluno) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Deseja ativar a matricula do aluno " + aluno.getNome() + "?  (S/N)");
+        String opcao = scan.next();
+        if (opcao.equalsIgnoreCase("S")) {
+            aluno.getMatricula().setStatusMatricula(StatusMatricula.ATIVA);
+            System.out.println("Matricula " + aluno.getMatricula().getNumero() + " ativada");
+        }
+    }
 
 }
