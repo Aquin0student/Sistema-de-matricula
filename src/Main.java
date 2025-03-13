@@ -1,6 +1,7 @@
 import DAO.AlunoDao;
 import DAO.MatriculaDao;
 import DAO.UniversidadeDao;
+import Enums.StatusMatricula;
 import Models.Aluno;
 import Models.Matricula;
 import Models.Universidade;
@@ -71,57 +72,84 @@ public class Main {
     }
 
     public static void menu(Universidade universidade) {
-        System.out.println("Bem-vindo ao sistema da universidade " + universidade.getNome() + "!");
-        System.out.println("1. Gerenciar alunos");
-        System.out.println("2. Gerenciar cursos");
-        System.out.println("3. Gerenciar professores");
-        System.out.println("4. Gerenciar disciplinas");
-        System.out.println("5. Sair");
-
         Scanner scan = new Scanner(System.in);
-        int opcao = scan.nextInt();
+        int opcao;
+        do{
+            System.out.println("Bem-vindo ao sistema da universidade " + universidade.getNome() + "!");
+            System.out.println("1. Gerenciar alunos");
+            System.out.println("2. Gerenciar cursos");
+            System.out.println("3. Gerenciar professores");
+            System.out.println("4. Gerenciar disciplinas");
+            System.out.println("5. Sair");
 
-        switch(opcao) {
-            case 1:
-                gerenciarAlunos();
-            case 2:
-                System.out.println("Visualização de Alunos ainda não implementada.");
-                break;
-            case 3:
-                System.out.println("Saindo...");
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Opção inválida. Tente novamente.");
-                menu(universidade);
-        }
+            opcao = scan.nextInt();
+
+            switch(opcao) {
+                case 1:
+                    gerenciarAlunos();
+                case 2:
+                    System.out.println("Visualização de cursos ainda não implementada.");
+                    esperar();
+                    limparConsole();
+                    break;
+                case 3:
+                    System.out.println("Saindo...");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    menu(universidade);
+            }
+        }while(opcao != 5);
+
     }
 
     public static void gerenciarAlunos() {
         Scanner scan = new Scanner(System.in);
-        int opcao = -1;
-        while (opcao != 0) {
+
+        AlunoDao alunoDAO = new AlunoDao();
+        MatriculaDao matriculaDAO = new MatriculaDao();
+        Aluno aluno;
+        int opcao;
+
+        do{
             System.out.println("Gerencia de alunos: ");
             System.out.println("1- Criar aluno: ");
             System.out.println("2- Cancelar matricula de aluno: ");
+            System.out.println("3- Ativar matricula de aluno: ");
 
             opcao = scan.nextInt();
 
             switch (opcao) {
                 case 1:
-                    Aluno aluno = criarAluno();
-                    AlunoDao alunoDao = new AlunoDao();
+                    aluno = criarAluno();
                     Matricula matricula = criarMatricula();
                     aluno.setMatricula(matricula);
                     matricula.setAluno(aluno);
-                    alunoDao.adicionarAluno(aluno);
-                    MatriculaDao matriculaDao = new MatriculaDao();
-                    matriculaDao.adicionarMatricula(matricula);
+                    alunoDAO.adicionarAluno(aluno);
+                    matriculaDAO.adicionarMatricula(matricula);
+                    break;
+                case 2:
+                    aluno = buscarAluno();
+                    if (aluno == null) {
+                        break;
+                    }
+                    cancelarMatricula(aluno);
+                    break;
+
+                case 3:
+                    aluno = buscarAluno();
+                    if (aluno == null) {
+                        break;
+                    }
 
 
             }
-        }
+        }while (opcao != 0);
     }
+
+
+
 
     public static Matricula criarMatricula() {
         Scanner scan = new Scanner(System.in);
@@ -157,4 +185,53 @@ public class Main {
 
         return aluno;
     }
+
+    public static Aluno buscarAluno(){
+        AlunoDao alunoDAO = new AlunoDao();
+        Scanner scan = new Scanner(System.in);
+        Aluno aluno = null;
+
+        while (aluno == null) {
+            System.out.println("Insira o nome do aluno: ");
+            String nomeAluno = scan.next();
+            aluno = alunoDAO.buscarAlunoPorNome(nomeAluno);
+            if(aluno == null){
+                System.out.println("Deseja voltar ao menu? (S/N)");
+                String opcao = scan.next();
+                if (opcao.equalsIgnoreCase("S")) {
+                    break;
+                }
+            }
+
+
+        }
+        return aluno;
+    }
+
+    public static void esperar(){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void limparConsole() {
+        for (int i = 0; i < 50; ++i) {
+            System.out.println();
+        }
+    }
+
+    public static void cancelarMatricula(Aluno aluno) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Deseja cancelar a matricula do aluno " + aluno.getNome() + "?  (S/N)");
+        String opcao = scan.next();
+        if (opcao.equalsIgnoreCase("S")) {
+            aluno.getMatricula().setStatusMatricula(StatusMatricula.CANCELADA);
+            System.out.println("Matricula " + aluno.getMatricula().getNumero() + " cancelada");
+        }
+    }
+
+
+
 }

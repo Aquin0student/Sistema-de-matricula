@@ -60,11 +60,13 @@ public class AlunoDao extends AbstractDao<Aluno> {
     }
 
     public Aluno buscarAlunoPorNome(String nome) {
+        carregarDados();
         for (Aluno aluno : alunos) {
             if (aluno.getNome().equalsIgnoreCase(nome)) {
                 return aluno;
             }
         }
+        System.out.println("Aluno não encontrado");
         return null;
     }
 
