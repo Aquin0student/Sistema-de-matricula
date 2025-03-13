@@ -90,10 +90,45 @@ public class Main {
 
     }
 
-    public static void menuAlunos() {
+    public static void menuAlunos(Aluno aluno) {
         Scanner scan = new Scanner(System.in);
         int opcao;
 
+        do{
+            System.out.println("\nBem vindo ao menu universitario: ");
+            System.out.println("1. Verificar status da matricula ");
+            System.out.println("2. Verificar disciplinas matriculadas ");
+            System.out.println("3. Realizar matricula ");
+            System.out.println("4. Cancelar matricula na disciplina");
+            System.out.println("5. Sair");
+            opcao = scan.nextInt();
+
+            switch(opcao) {
+                case 1:
+                    verificarStatusMatricula(aluno);
+                    break;
+                case 2:
+                    verificarDisciplinasMatriculadas(aluno);
+                    break;
+
+                case 3:
+                    realizarMatricula(aluno);
+                    break;
+
+                case 4:
+                    cancelarMatriculaNaDisciplina(aluno);
+                    break;
+
+                case 5:
+                    System.out.println("Saindo...");
+                    System.exit(0);
+
+                default:
+                    System.out.println("Opcao invalida. Tente novamente.");
+                    break;
+            }
+
+        }while (opcao != 0);
     }
 
     public static void menuLogin(){
@@ -148,7 +183,7 @@ public class Main {
                 int senha = scan.nextInt();
                 if (matricula.getAluno().getSenha() == senha) {
                     acesso = true;
-                    menuAlunos();
+                    menuAlunos(matricula.getAluno());
                 }else{
                     System.out.println("\n Senha incorreta: ");
                     System.out.println("Deseja voltar ao menu principal? (S/N)");
@@ -516,4 +551,88 @@ public class Main {
             System.out.println(disciplina.getNome());
         }
     }
+
+    public static void verificarStatusMatricula(Aluno aluno){
+        Matricula matricula = aluno.getMatricula();
+        StatusMatricula statusMatricula = matricula.getStatusMatricula();
+        System.out.println("Status atual da matricula " + statusMatricula);
+        esperar();
+        limparConsole();
+    }
+
+    public static void verificarDisciplinasMatriculadas(Aluno aluno){
+        DisciplinaDao disciplinaDAO = new DisciplinaDao();
+        Matricula matricula = aluno.getMatricula();
+        ArrayList<Disciplina> disciplinas = new ArrayList<>();
+        disciplinas = matricula.getDisciplinas();
+
+        if (disciplinas.isEmpty()) {
+            System.out.println("Não ha nenhuma disciplina matriculada!");
+        }else{
+            for (Disciplina disciplina : disciplinas) {
+                System.out.println(disciplina.getNome());
+            }
+        }
+
+        esperar();
+        limparConsole();
+    }
+
+    public static void realizarMatricula(Aluno aluno){
+        Matricula matricula = aluno.getMatricula();
+        MatriculaDao matriculaDao = new MatriculaDao();
+        DisciplinaDao disciplinaDAO = new DisciplinaDao();
+        Scanner scan = new Scanner(System.in);
+        ArrayList<Disciplina> disciplinas = disciplinaDAO.listarDisciplinas();
+        String opcao;
+        do{
+            System.out.println("Lista de disciplinas: ");
+            for(Disciplina disciplina : disciplinas){
+                System.out.println(disciplina.getNome());
+            }
+
+            System.out.println("Escolha uma disciplina: (ou SAIR para encerrar) ");
+            opcao = scan.nextLine();
+
+            for(Disciplina disciplina : disciplinas){
+                if(opcao.equalsIgnoreCase(disciplina.getNome())){
+                    matricula.adicionarDisciplina(disciplina);
+                    disciplina.adicionarMatricula(matricula);
+                    System.out.println("Matricula adicionada com sucesso!");
+                }
+            }
+
+        }while(opcao.equalsIgnoreCase("SAIR"));
+    }
+
+    public static void cancelarMatriculaNaDisciplina(Aluno aluno){
+        Scanner scan = new Scanner(System.in);
+        Matricula matricula = aluno.getMatricula();
+        MatriculaDao matriculaDao = new MatriculaDao();
+        DisciplinaDao disciplinaDAO = new DisciplinaDao();
+        ArrayList<Disciplina> disciplinas = matricula.getDisciplinas();
+        String opcao;
+        do{
+            System.out.println("Lista de disciplinas matriculadas: ");
+            for(Disciplina disciplina : disciplinas){
+                System.out.println(disciplina.getNome());
+            }
+
+            System.out.println("Escolha uma disciplina: (ou SAIR para encerrar) ");
+            opcao = scan.nextLine();
+
+            for(Disciplina disciplina : disciplinas){
+                if(opcao.equalsIgnoreCase(disciplina.getNome())){
+                    matricula.removerDisciplina(disciplina);
+                    disciplina.removerMatricula(matricula);
+                    System.out.println("Matricula removida com sucesso!");
+                }
+            }
+
+        }while (opcao.equalsIgnoreCase("SAIR"));
+        esperar();
+        limparConsole();
+    }
+
+
 }
