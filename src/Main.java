@@ -151,11 +151,12 @@ public class Main {
                     break;
 
                 case 2:
-                    break;1
+                    break;
 
                 case 3:
                     loginSecretaria();
                     break;
+
 
                 default:
                     System.out.println("Opcao invalida. Tente novamente.");
