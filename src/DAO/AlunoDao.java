@@ -8,17 +8,29 @@ import java.util.ArrayList;
 
 
 
-public class AlunoDAO extends AbstractDao<Aluno> {
+public class AlunoDao extends AbstractDao<Aluno> {
     private ArrayList<Aluno> alunos = new ArrayList<>();
     private static final String FILE_PATH = "alunos.dat";
+    private static AlunoDao instancia;
 
-    public AlunoDAO() {
+    public AlunoDao() {
         super(FILE_PATH);
     }
 
     public void adicionarAluno(Aluno aluno) {
         alunos.add(aluno);
         salvarDados();
+    }
+
+    public static AlunoDao getInstance() {
+        if (instancia == null) {
+            synchronized (AlunoDao.class) {
+                if (instancia == null) {
+                    instancia = new AlunoDao();
+                }
+            }
+        }
+        return instancia;
     }
 
     public boolean verificarLogin(String nome, int senha) {

@@ -1,4 +1,4 @@
-import DAO.AlunoDAO;
+import DAO.AlunoDao;
 import DAO.UniversidadeDao;
 import Models.Universidade;
 
@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         UniversidadeDao universidadeDAO = new UniversidadeDao();
         Scanner scan = new Scanner(System.in);
-        AlunoDAO alunoDAO = new AlunoDAO();
+        AlunoDao alunoDAO = new AlunoDao();
         Universidade universidade = new Universidade();
         if (verificarUniversidade()) {
             boolean acesso = false;

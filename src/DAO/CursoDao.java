@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class CursoDao extends AbstractDao{
     private ArrayList<Curso> cursos = new ArrayList<>();
     private static final String FILE_PATH = "cursos.dat";
+    private static CursoDao instancia;
 
     public CursoDao(){
         super(FILE_PATH);
@@ -19,6 +20,18 @@ public class CursoDao extends AbstractDao{
         salvarDados();
 
     }
+
+    public static CursoDao getInstance() {
+        if (instancia == null) {
+            synchronized (CursoDao.class) {
+                if (instancia == null) {
+                    instancia = new CursoDao();
+                }
+            }
+        }
+        return instancia;
+    }
+
 
     public void salvarDados() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_PATH))) {

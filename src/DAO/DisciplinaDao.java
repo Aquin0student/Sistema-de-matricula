@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class DisciplinaDao extends AbstractDao {
     private ArrayList<Disciplina> disciplinas = new ArrayList<>();
     private static final String FILE_PATH = "disciplinas.dat";
+    private static DisciplinaDao instancia;
 
     public DisciplinaDao() {
         super(FILE_PATH);
@@ -15,6 +16,17 @@ public class DisciplinaDao extends AbstractDao {
     public void adicionarDisciplina(Disciplina disciplina) {
         disciplinas.add(disciplina);
         salvarDados();
+    }
+
+    public static DisciplinaDao getInstance() {
+        if (instancia == null) {
+            synchronized (DisciplinaDao.class) {
+                if (instancia == null) {
+                    instancia = new DisciplinaDao();
+                }
+            }
+        }
+        return instancia;
     }
 
     public void salvarDados() {

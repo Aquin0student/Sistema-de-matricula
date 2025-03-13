@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class ProfessorDao extends AbstractDao {
     private ArrayList<Professor> professores = new ArrayList<>();
     public static final String FILE_PATH = "professores.dat";
+    private static ProfessorDao instancia;
 
     public ProfessorDao(){
         super(FILE_PATH);
@@ -17,6 +18,19 @@ public class ProfessorDao extends AbstractDao {
         professores.add(professor);
         salvarDados();
     }
+
+
+    public static ProfessorDao getInstance() {
+        if (instancia == null) {
+            synchronized (ProfessorDao.class) {
+                if (instancia == null) {
+                    instancia = new ProfessorDao();
+                }
+            }
+        }
+        return instancia;
+    }
+
 
     public void removerProfessor(Professor professor){
         professores.remove(professor);

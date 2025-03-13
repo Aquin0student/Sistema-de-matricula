@@ -1,5 +1,6 @@
 package DAO;
 
+import Models.Disciplina;
 import Models.Universidade;
 import java.io.*;
 import java.util.ArrayList;
@@ -7,6 +8,23 @@ import java.util.ArrayList;
 public class UniversidadeDao {
     private static final String FILE_NAME = "universidade_data.dat";
     private ArrayList<Universidade> universidades = new ArrayList<>();
+    private static UniversidadeDao instancia;
+
+    public void adicionarUniversidade(Universidade universidade) {
+        universidades.add(universidade);
+        salvarDados();
+    }
+
+    public static UniversidadeDao getInstance() {
+        if (instancia == null) {
+            synchronized (UniversidadeDao.class) {
+                if (instancia == null) {
+                    instancia = new UniversidadeDao();
+                }
+            }
+        }
+        return instancia;
+    }
 
 
     // Salva a lista de universidades no arquivo
